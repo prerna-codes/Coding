@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+
+  <body>
+    <div id="links">
+      <div><a href="index.html">Home</a></div>
+      <div><a href="applied.html">Applied Jobs</a></div>
+      <div><a href="bookmark.html">Bookmarks</a></div>
+    </div>
+    <form action="" id="form">
+      <h2>Enter Your Application Details</h2>
+      <input placeholder="Enter Name" id="name" name="name" type="text" />
+      <input placeholder="Enter email" type="email" name="email" id="email" />
+      <select name="role" id="role">
+        <option value="FSD">FSD</option>
+        <option value="Backend">Backend</option>
+        <option value="Frontend">Frontend</option>
+      </select>
+      <input
+        id="salary"
+        type="number"
+        placeholder="Enter expected salary in lakhs per annum "
+      />
+      <input id="submit" type="submit" name="submit" value="Submit" />
+    </form>
+  </body>
+  <script>
+    //you need to code here
+    let jobForm = document.querySelector("form");
+    let nameInp = document.getElementById("name");
+    let emailInp = document.getElementById("email");
+    let roleInp = document.getElementById("role");
+    let salaryInp = document.getElementById("salary");
+    let jobArray = JSON.parse(localStorage.getItem("job")); //2
+
+    if (jobArray == null) {
+      jobArray = [];
+    }
+
+    jobForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let formData = {
+        name: nameInp.value,
+        email: emailInp.value,
+        role: roleInp.value,
+        salary: Number(salaryInp.value),
+      };
+      jobArray.push(formData);
+      localStorage.setItem("job", JSON.stringify(jobArray)); // 1
+    });
+  </script>
+</html>

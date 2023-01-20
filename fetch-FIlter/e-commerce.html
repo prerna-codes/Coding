@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Commerce</title>
+    <style>
+      .container {
+        width: 90%;
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+      }
+      .card img {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <input placeholder="From" type="number" id="from" />
+      <input placeholder="To" type="number" id="to" />
+      <input type="submit" value="Filter" />
+    </form>
+    <div class="container"></div>
+  </body>
+  <script>
+    const API = "https://fakestoreapi.com/products";
+
+    let containerEl = document.querySelector(".container");
+    let filterForm = document.querySelector("form");
+    let fromInput = document.getElementById("from");
+    let fetchedData = [];
+    fetch(API)
+      .then((request) => {
+        // Stream
+        return request.json();
+      })
+      .then((data) => {
+        fetchedData = data;
+        DisplayProducts(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    filterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let fromPrice = Number(filterForm.from.value);
+      let toPrice = +filterForm.to.value;
+      console.log(fromPrice + " " + toPrice);
+
+      let filtered = fetchedData.filter((element) => {
+        if (element.price >= fromPrice && element.price <= toPrice) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      DisplayProducts(filtered);
+    });
+    function DisplayProducts(data) {
+      containerEl.innerHTML = "";
+      data.forEach((element) => {
+        let productCard = document.createElement("div");
+        productCard.setAttribute("class", "card");
+
+        let img = document.createElement("img");
+        img.setAttribute("src", element.image);
+
+        let title = document.createElement("h2");
+        title.innerText = element.title;
+
+        let desc = document.createElement("p");
+        desc.innerText = element.description;
+
+        let price = document.createElement("h4");
+        price.textContent = element.price;
+
+        productCard.append(img, title, desc, price);
+        containerEl.append(productCard);
+      });
+    }
+  </script>
+</html>

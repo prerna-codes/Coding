@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web Movie App</title>
+    <style>
+      /* Write necessery styles here  */
+      #movie_container{
+        display: flex;
+        grid-template-columns: repeat(4,1fr);
+        gap: 30px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id="serach">
+      <input type="text" id="search-inp"/>
+      <button id="search-btn">Search</button>
+    </div>
+    <div id="movie_container"></div>
+  </body>
+
+  <script>
+    // Write necessery JS here
+    const searchBtn = document.getElementById("search-btn");
+    const searchInp = document.getElementById("search-inp");
+    const movieContainer = document.getElementById("movie_container");
+    const apiKey = "ca3b0ca1";
+
+    searchBtn.addEventListener("click", () => {
+      movieContainer.innerHTML = "";
+      const searchQuery = searchInp.value;
+      const url = `https://www.omdbapi.com/?apiKey=${apiKey}&s=`;
+
+      fetch(url+searchQuery)
+        .then(response => response.json())
+        .then(data => {
+          if (data.Response === "False") {
+            const error = document.createElement("h2");
+            error.classList.add("error-container");
+            error.textContent = "Movie not found!";
+            movieContainer.appendChild(error);
+          } else {
+            const movies = data.Search;
+            movies.forEach(movie => {
+              const card = document.createElement("div");
+              card.classList.add("card");
+              const title = document.createElement("h2");
+              title.classList.add("title");
+              title.textContent = movie.Title;
+              card.appendChild(title);
+              const poster = document.createElement("img");
+              poster.classList.add("poster");
+              poster.src = movie.Poster;
+              card.appendChild(poster);
+              movieContainer.appendChild(card);
+            });
+            }
+            })
+            .catch(error => console.log(error))
+           });
+
+
+ 
+    
+  </script>
+</html>
